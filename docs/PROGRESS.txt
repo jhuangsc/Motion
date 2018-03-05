@@ -1,0 +1,97 @@
+==== References ====
+OpenCV doc	http://docs.opencv.org/index.html
+Tkinter doc	http://doc.astro-wise.org/Tkinter.html
+MultiListBox ex	http://code.activestate.com/recipes/52266/ 
+
+==== Pending Tasks ====
+General
+- codec support - how?
+- compile to EXE
+VidHandler
+- somehow detect VFPS
+- if CFPS, run through initially to accurately get vid length/frame count
+Motion
+- poll system time before and after analysis
+- needs option to start at X time (ie to ignore camera focusing at start)
+- may need option to ignore area of video
+- command-line: set mode and settings
+
+==== Log ====
+July 9 2014
+- started building MainGUI.py
+July 11-13 2014
+- worked on MainGUI.py
+  - main window done (600x300)
+  - start/stop deltas started
+  - basic menus made
+  - started on validating settings inputs
+July 14 2014
+- worked on MainGUI.py
+  - adjusted window size and positioning (larger, 800x420)
+  - added scrollbars to the file list
+    - working on mouse wheel functionality
+August 21 2014
+- worked on VidHandler.py
+  - successfully opened and played a video
+  - note: looks like only uncompressed AVIs are OK atm
+  - can successfully get vid dimensions, CFPS, frame count, duration
+  - can also get the time of the current frame based on its index
+August 22 2014
+- worked on VidHandler.py
+  - added handles for Motion.py
+- worked on Motion.py
+  - started command-line interface
+  - laid framework for motion detection (no actual function yet)
+August 26 2014
+- worked on Motion.py
+  - improved command-line input options
+  - can now use OpenCV without needing to install it
+  - working on getting no-install codec integration
+August 27 2014
+- worked on Motion.py
+  - finally figured out how to get it to recognize ffmpeg
+    - codec files will probably need to be placed in the same folder
+    - however, FFmpeg is versatile, maybe we won't need any more?
+August 28 2014
+- worked on Motion.py
+  - implemented image differential, can be used for thresholding or obj detection
+September 2014
+- worked on Motion.py
+  - added command-line interface
+  - implemented thresholding and contrast methods
+  - not quite working, different methods of counting pixels don't agree
+    - also, grayscaling isn't working
+October 9 2014
+- worked on Motion.py
+  - fixed grayscaling and contrast methods
+  - cleaned up analysis method's structure
+  - implemented motion detection from contrast in differential imaage
+  - started working on motion intervals
+October 10 2014
+- worked on Motion.py
+  - also fully implemented intervals
+  - fixed output
+  - tweaking values to find ideal ranges
+  - added maximum sensitivity threshold - if more change than this, no motion
+    - intended to reduce errors due to light or camera shifts
+  - need to fix bug where video length is slightly overestimated
+  - backed up build to allow for cleaning-up of old code
+October 2014
+- continued to adjust
+- started to implement interval merging for intervals that are very close together - recursive method not working, returns 0 intervals
+November 6 2014
+- replaced recursive merging with looped merging, works OK
+  - still have to confirm these intervals
+November 7 2014
+- tested merged intervals against video
+  - didn't get 100% of all bees
+    - large number of missed bees between intervals
+  - got a good number of false positives
+    - included a lot of noise intervals
+    - also initial camera/light still caused interval
+  - next step: check if merging was causing loss of intervals
+  - next step: adjust sensitivity (less), reduce buffer, merge threshold
+  - still have to fix time stretch
+- Settings for next test run:
+  mothre 0.1, mobuff 5, merthr 2, mosens 1.5e-4, mostop 0.0025
+- Data (itvs, mitvs, manual x2) for CSEE vid has been saved for review, comparison
